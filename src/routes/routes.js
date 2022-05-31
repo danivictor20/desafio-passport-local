@@ -1,4 +1,5 @@
 import { Router } from 'express'
+import passport from "passport";
 const rutas = Router()
 
 /**
@@ -14,6 +15,13 @@ rutas.get('/error-de-login', (req, res) => res.render('error-login'))
  * Rutas para autenticar
  */
 
+rutas.post('/login', passport.authenticate('login', {failureRedirect: '/error-de-login'}), (req, res) => {
+    res.send('estamos bien')
+})
+
+rutas.post('/register', passport.authenticate('signup', {failureRedirect: '/error-de-login'}), (req, res) => {
+    res.send('usuario creado')
+})
 
 
 export default rutas

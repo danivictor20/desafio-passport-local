@@ -11,27 +11,21 @@ import passport from "passport";
 import { Strategy } from "passport-local";
 import { User } from "./src/models/usuario.js"
 
+import { isValidPassword, createHash } from "./src/utils/validate.js"
+
 const app = express()
-
-
 
 passport.use('login', new Strategy(
     (username, password, done) => {
         User.findOne({ username }, (err, user) => {
             if (err) return done(err);
-   
             if (!user) return done(null, false);
-   
             if (!isValidPassword(user, password)) return done(null, false);
    
             return done(null, user);
       });
     })
 );
-
-function isValidPassword(user, password) {
-    return bcrypt.compareSync(password, user.password);
-}
 
 
 passport.use('signup', new Strategy({
@@ -58,9 +52,7 @@ passport.use('signup', new Strategy({
     })
 )
 
-function createHash(password) {
-    return bcrypt.hashSync(password, bcrypt.genSaltSync(10), null);
-}
+
 
 passport.serializeUser((user, done) => {
     done(null, user._id);
@@ -91,20 +83,8 @@ app.use(session({
 }));
 app.use(passport.initialize());
 app.use(passport.session());
-   
-
-
-
-
 app.use(rutas)
 
-app.post('/login', passport.authenticate('login', {failureRedirect: '/error-de-login'}), (req, res) => {
-    res.send('estamos bien')
-})
-
-app.post('/register', passport.authenticate('signup', {failureRedirect: '/error-de-login'}), (req, res) => {
-    res.send('usuario creado')
-})
 
 mongoose.connect(process.env.MONGO);
 
