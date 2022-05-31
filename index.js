@@ -26,7 +26,7 @@ app.use(session({
     cookie: {
         httpOnly: false,
         secure: false,
-        maxAge: 20000
+        maxAge: Number(process.env.TIME_SESSION_SECONDS) * 1000 // Tiempo de inactividad
     },
     rolling: true,
     resave: true,
