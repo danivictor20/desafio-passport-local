@@ -9,22 +9,23 @@
     <title>Login</title>
 </head>
 <body>
-    <div class="container">
+    <div class="container mt-4">
         <h1>Inicie sesión</h1>
-        <a class="btn btn-success" href="/register">Registrarse</a>
         <div class="row">
             <div class="col-sm-8 col-lg-4 col-md-6">
-                <form class="form" action="/login" method="post" role="form" autocomplete="off">
-                    <div class="form-group">
-                        <input id="username" name='username' placeholder="username" class="form-control" type="text" required>
+                <form class="form" action="/ecommerce/login" method="post" role="form" autocomplete="off">
+                    <div class="form-group mt-4">
+                        <input id="username" name='username' placeholder="username" class="form-control" type="text" required autofocus>
                     </div>
-                    <br>
-                    <div class="form-group">
+                    <div class="form-group mt-2">
                         <input id="password" name='password' placeholder="password" class="form-control" type="password" required>
                     </div>
                     <br>
                     <div class="form-group">
-                        <input class="btn btn-success my-3" type="submit" value="Login">
+                        <div class="d-grid gap-2">
+                            <input class="btn btn-primary" type="submit" value="Iniciar sesión">
+                            <a class="btn btn-success" href="/ecommerce/register">Crear cuenta nueva</a>
+                        </div>
                     </div>
                 </form>
             </div>

@@ -7,50 +7,12 @@ import mongoose from "mongoose"
 import rutas from './src/routes/routes.js'
 
 import passport from "passport";
-import { Strategy } from "passport-local";
-import { User } from "./src/models/usuario.js"
-
-import { createHash } from "./src/utils/validate.js"
-
-import { objStragy } from "./src/middlewares/passportLocal.js"
+import { objStrategy, objStrategySignup } from "./src/middlewares/passportLocal.js"
 
 const app = express()
 
-passport.use('login', objStragy);
-
-
-passport.use('signup', new Strategy({
-        passReqToCallback: true
-    },
-    (req, username, password, done) => {
-        User.findOne({ 'username': username }, function (err, user) {
-   
-            if (err) return done(err)
-            if (user) return done(null, false)
-    
-            const newUser = {
-                name: req.body.name,
-                username: req.body.username,
-                password: createHash(password),
-            }
-
-            User.create(newUser, (err, userWithId) => {
-                if (err) return done(err);
-                return done(null, userWithId);
-            });
-        });
-    })
-)
-
-passport.serializeUser((user, done) => {
-    done(null, user._id);
-});
-  
-passport.deserializeUser((id, done) => {
-    User.findById(id, done);
-});
-
-
+passport.use('login', objStrategy);
+passport.use('signup', objStrategySignup)
 
 app.set('view engine', 'ejs')
 app.set('views', './src/views')
@@ -74,8 +36,9 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use(rutas)
+app.use('/ecommerce', rutas)
 
 mongoose.connect(process.env.MONGO);
 
-app.listen(8080, () => console.log('http://localhost:8080/'))
+const PORT = process.env.PORT
+app.listen(PORT, () => console.log(`http://localhost:${PORT}/ecommerce/`))

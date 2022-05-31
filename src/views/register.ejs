@@ -8,14 +8,13 @@
     <title>Register</title>
 </head>
 <body>
-    <div class="container">
+    <div class="container mt-4">
         <h1>Registrese</h1>
-        <a class="btn btn-success" href="/login">Iniciar sesión</a>
         <div class="row">
             <div class="col-sm-8 col-lg-4 col-md-6">
-                <form class="form" action="/register" method="post" role="form" autocomplete="off">
-                    <div class="form-group">
-                        <input id="username" name='name' placeholder="Nombre" class="form-control" type="text" required>
+                <form class="form" action="/ecommerce/register" method="post" role="form" autocomplete="off">
+                    <div class="form-group mt-4">
+                        <input id="username" name='name' placeholder="Nombre" class="form-control" type="text" required autofocus>
                     </div>
                     <br>
                     <div class="form-group">
@@ -27,7 +26,10 @@
                     </div>
                     <br>
                     <div class="form-group">
-                        <input class="btn btn-success my-3" type="submit" value="Registrar nuevo">
+                        <div class="d-grid gap-2">
+                            <input class="btn btn-primary" type="submit" value="Registrar">
+                            <a class="btn btn-success" href="/ecommerce/login">Ya tengo una cuenta de ingreso</a>
+                        </div>
                     </div>
                 </form>
             </div>
