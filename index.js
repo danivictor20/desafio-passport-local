@@ -1,5 +1,4 @@
 import express from "express"
-import cookieParser from "cookie-parser"
 import session from "express-session"
 import 'dotenv/config'
 import mongoose from "mongoose"
@@ -20,7 +19,6 @@ app.set('views', './src/views')
 app.use(express.urlencoded({extended: true}))
 app.use(express.json())
 
-app.use(cookieParser())
 app.use(session({
     secret: 'clave_secreta',
     cookie: {

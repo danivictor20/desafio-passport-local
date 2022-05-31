@@ -1,14 +1,13 @@
 import { Router } from 'express'
 import passport from "passport";
 import { isAuth } from '../middlewares/authenticated.js'
+import { listaProductos } from '../controllers/userController.js'
 const rutas = Router()
 
 /**
  * Rutas get para renderizar las vistas
  */
-rutas.get('/', isAuth, (req, res) => res.render('productos', {
-    user: req.user
-}))
+rutas.get('/', isAuth, listaProductos)
 
 rutas.get('/login', (req, res) => {
     if (req.isAuthenticated()) return res.redirect('/ecommerce')
