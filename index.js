@@ -3,6 +3,8 @@ import session from "express-session"
 import 'dotenv/config'
 import mongoose from "mongoose"
 
+import minimist from "minimist"
+
 import rutas from './src/routes/routes.js'
 
 import passport from "passport";
@@ -38,5 +40,6 @@ app.use('/ecommerce', rutas)
 
 mongoose.connect(process.env.MONGO);
 
-const PORT = process.env.PORT
+const args = minimist(process.argv.slice(2))
+const PORT = args.puerto || 8080
 app.listen(PORT, () => console.log(`http://localhost:${PORT}/ecommerce/`))
