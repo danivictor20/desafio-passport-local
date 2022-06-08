@@ -1,4 +1,4 @@
-const cantidad = Number(process.argv.slice(2))
+const cantidad = Number(process.argv[2])
 
 let arrNumeros = []
 const min = 1
