@@ -10,6 +10,12 @@ import rutas from './src/routes/routes.js'
 import passport from "passport";
 import { objStrategy, objStrategySignup } from "./src/middlewares/passportLocal.js"
 
+import os from 'os'
+import cluster from "cluster"
+const numCPU = os.cpus().length
+
+
+
 const app = express()
 
 passport.use('login', objStrategy);
@@ -41,5 +47,30 @@ app.use('/ecommerce', rutas)
 mongoose.connect(process.env.MONGO);
 
 const args = minimist(process.argv.slice(2))
-const PORT = args.puerto || 8080
-app.listen(PORT, () => console.log(`http://localhost:${PORT}/ecommerce/`))
+const PORT = Number(args.puerto) || 8080
+const modoServer = args.modo || 'FORK'
+
+
+if(modoServer == "CLUSTER"){
+    if (cluster.isPrimary) {
+        console.log('Se ejecutó en modo CLUSTER. Creando Workers')
+        for (let i = 0; i < numCPU; i++) {
+            cluster.fork();
+        }
+        cluster.on("listening", (worker, address) => {
+            console.log(`Worker: ${worker.process.pid} || Port: ${address.port}`);
+        });
+    } else {
+        app
+            .listen(PORT, () => console.log(`http://localhost:${PORT}/ecommerce/`))
+            .on('error', err => console.log(err))
+    }
+}else{
+
+    console.log('Se ejecutó en modo FORK.')
+    app
+        .listen(PORT, () => console.log(`http://localhost:${PORT}/ecommerce/`))
+        .on('error', err => console.log(err))
+}
+
+

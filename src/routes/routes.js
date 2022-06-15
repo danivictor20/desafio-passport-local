@@ -5,6 +5,7 @@ import { listaProductos } from '../controllers/userController.js'
 const rutas = Router()
 
 import { fork } from "child_process";
+import os from 'os'
 
 /**
  * Rutas get para renderizar las vistas
@@ -41,6 +42,7 @@ rutas.get('/info', (req, res) => {
         nodeVersion: process.version,
         totalMemory: process.memoryUsage().rss,
         processId : process.pid,
+        cantidadDeCPUs: os.cpus().length,
     }
     res.json(dataProcess)
 })
@@ -52,7 +54,10 @@ rutas.get('/api/randoms', (req, res) => {
     const forked = fork('procesoSecundario.js', [cantidad], {
         cwd: process.cwd()
     })
-    forked.on("message", respuesta => res.send(respuesta))
+    forked.on("message", respuesta => res.json({
+        respuesta,
+        pid: process.pid
+    }))
 
 
 })
