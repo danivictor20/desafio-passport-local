@@ -64,7 +64,7 @@ rutas.get('/logout', isAuth, (req, res) => {
 })
 
 rutas.get('/info', (req, res) => {
-
+    console.log('Esto se supone que lo haría bloqueante')
     try {
         logger.info('esto es un logger de info')
         const dataProcess = {
