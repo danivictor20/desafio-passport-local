@@ -14,9 +14,11 @@ import os from 'os'
 import cluster from "cluster"
 const numCPU = os.cpus().length
 
-
+import { logger, loggerWarn, loggerError } from "./src/utils/logger.js"
+import compression from "compression"
 
 const app = express()
+app.use(compression())
 
 passport.use('login', objStrategy);
 passport.use('signup', objStrategySignup)
@@ -44,6 +46,13 @@ app.use(passport.session());
 
 app.use('/ecommerce', rutas)
 
+app.use((req, res) => {
+    logger.warn('La ruta no existe')
+    loggerWarn.warn('La ruta que quiere accede no existe')
+    res.send('La ruta no existe')
+})
+
+
 mongoose.connect(process.env.MONGO);
 
 const args = minimist(process.argv.slice(2))
@@ -53,24 +62,27 @@ const modoServer = args.modo || 'FORK'
 
 if(modoServer == "CLUSTER"){
     if (cluster.isPrimary) {
-        console.log('Se ejecutó en modo CLUSTER. Creando Workers')
+        logger.info('Se ejecutó en modo CLUSTER. Creando Workers')
         for (let i = 0; i < numCPU; i++) {
             cluster.fork();
         }
         cluster.on("listening", (worker, address) => {
-            console.log(`Worker: ${worker.process.pid} || Port: ${address.port}`);
+            logger.info(`Worker: ${worker.process.pid} || Port: ${address.port}`);
         });
     } else {
         app
-            .listen(PORT, () => console.log(`http://localhost:${PORT}/ecommerce/`))
-            .on('error', err => console.log(err))
+            .listen(PORT, () => logger.info(`http://localhost:${PORT}/ecommerce/`))
+            .on('error', err => logger.error(err))
     }
 }else{
 
-    console.log('Se ejecutó en modo FORK.')
+    logger.info('Se ejecutó en modo FORK.')
     app
-        .listen(PORT, () => console.log(`http://localhost:${PORT}/ecommerce/`))
-        .on('error', err => console.log(err))
+        .listen(PORT, () => logger.info(`http://localhost:${PORT}/ecommerce/`))
+        .on('error', err => () => {
+            logger.error(err)
+            loggerError.error(err)
+        })
 }
 
 
