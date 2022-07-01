@@ -56,7 +56,7 @@ app.use((req, res) => {
 mongoose.connect(process.env.MONGO);
 
 const args = minimist(process.argv.slice(2))
-const PORT = Number(args.puerto) || 8080
+const PORT = Number(args.puerto) || 3000
 const modoServer = args.modo || 'FORK'
 
 
