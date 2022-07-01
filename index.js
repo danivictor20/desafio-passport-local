@@ -59,6 +59,7 @@ const args = minimist(process.argv.slice(2))
 const PORT = Number(args.puerto) || 3000
 const modoServer = args.modo || 'FORK'
 
+console.log('Este es el segundero configurado', process.env.TIME_SESSION_SECONDS)
 
 if(modoServer == "CLUSTER"){
     if (cluster.isPrimary) {
